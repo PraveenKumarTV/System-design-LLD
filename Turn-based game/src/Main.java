@@ -5,49 +5,32 @@ public class Main {
 
         Game game = new Game("Player 1", "Player 2");
 
-        System.out.println("Game started!");
-        System.out.println();
-
-        // Player 1 makes a move
-        System.out.println(
-                game.getCurrentPlayer().getName() + "'s turn"
-        );
-
+        // Player 1: X at (0, 0)
         game.makeMove(0, 0);
 
-        game.displayBoard();
-        System.out.println();
+        // Player 2: O at (1, 0)
+        game.makeMove(1, 0);
 
-        // Player 2 makes a move
-        System.out.println(
-                game.getCurrentPlayer().getName() + "'s turn"
-        );
-
-        game.makeMove(1, 1);
-
-        game.displayBoard();
-        System.out.println();
-
-        // Player 1 tries an occupied cell
-        System.out.println(
-                game.getCurrentPlayer().getName() + "'s turn"
-        );
-
-        boolean result = game.makeMove(0, 0);
-
-        System.out.println("Move successful: " + result);
-
-        // The turn should remain with Player 1
-        System.out.println(
-                "Current player: "
-                        + game.getCurrentPlayer().getName()
-        );
-
-        System.out.println();
-
-        // Player 1 makes a valid move
+        // Player 1: X at (0, 1)
         game.makeMove(0, 1);
 
+        // Player 2: O at (1, 1)
+        game.makeMove(1, 1);
+
+        // Player 1: X at (0, 2) -> wins
+        game.makeMove(0, 2);
+
         game.displayBoard();
+
+        System.out.println();
+
+        game.displayResult();
+
+        // Try making a move after the game ends
+        boolean moveAfterGame = game.makeMove(2, 2);
+
+        System.out.println(
+                "Move after game ended: " + moveAfterGame
+        );
     }
 }

@@ -3,6 +3,7 @@ public class Game {
 
     private Board board;
     private BoardDisplay boardDisplay;
+    private TicTacToeRules rules;
 
     private Player player1;
     private Player player2;
@@ -15,11 +16,11 @@ public class Game {
 
         board = new Board();
         boardDisplay = new BoardDisplay();
+        rules = new TicTacToeRules();
 
         player1 = new Player(player1Name, 'X');
         player2 = new Player(player2Name, 'O');
 
-        // Player 1 starts the game
         currentPlayer = player1;
 
         result = GameResult.inProgress();
@@ -27,23 +28,37 @@ public class Game {
 
     public boolean makeMove(int row, int col) {
 
-        // Do not allow moves after the game ends
+        // Stop if the game has already ended
         if (result.getStatus() != GameResult.Status.IN_PROGRESS) {
             return false;
         }
 
-        // Current player creates their move
+        // Create a move for the current player
         Move move = currentPlayer.createMove(row, col);
 
-        // Try to place the move on the board
+        // Try to place the move
         boolean successful = board.placeMove(move);
 
-        // If the move is invalid, do not change the turn
+        // Invalid move: do not change the turn
         if (!successful) {
             return false;
         }
 
-        // Switch player after a successful move
+        // Check whether the current player has won
+        if (rules.hasWon(board, currentPlayer.getMark())) {
+
+            result = GameResult.win(currentPlayer);
+            return true;
+        }
+
+        // Check whether the board is full
+        if (rules.isBoardFull(board)) {
+
+            result = GameResult.draw();
+            return true;
+        }
+
+        // Continue the game with the next player
         switchPlayer();
 
         return true;
@@ -68,5 +83,9 @@ public class Game {
 
     public void displayBoard() {
         boardDisplay.display(board);
+    }
+
+    public void displayResult() {
+        result.displayResult();
     }
 }
