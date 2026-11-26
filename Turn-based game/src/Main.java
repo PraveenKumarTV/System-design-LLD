@@ -9,25 +9,35 @@ public class Main {
                 new RandomMoveStrategy();
 
         Game game = new Game(
-                "Computer 1",
-                "Computer 2",
+                "Player 1",
+                "Player 2",
                 rules,
                 strategy
         );
 
-        while (game.getResult().getStatus()
-                == GameResult.Status.IN_PROGRESS) {
+        Command move1 =
+                new MoveCommand(game, 0, 0);
 
-            System.out.println(
-                    game.getCurrentPlayer().getName()
-                    + " is making a move..."
-            );
+        Command move2 =
+                new MoveCommand(game, 1, 0);
 
-            game.makeComputerMove();
+        Command move3 =
+                new MoveCommand(game, 0, 1);
 
-            game.displayBoard();
-            System.out.println();
-        }
+        Command move4 =
+                new MoveCommand(game, 1, 1);
+
+        Command move5 =
+                new MoveCommand(game, 0, 2);
+
+        move1.execute();
+        move2.execute();
+        move3.execute();
+        move4.execute();
+        move5.execute();
+
+        game.displayBoard();
+        System.out.println();
 
         game.displayResult();
     }
