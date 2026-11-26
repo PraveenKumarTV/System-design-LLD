@@ -1,21 +1,34 @@
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        Cache cache = new Cache(2);
+    public static void main(String[] args) {
 
-        cache.put("A", "Apple", 10000);
-        cache.put("B", "Banana", 10000);
+        Cache cache = new Cache(
+            2, WritePolicy.WRITE_THROUGH
+        );
 
-        System.out.println(cache.get("A")); // Apple
+        // Preload data
+        cache.hotLoad("A", "B");
 
-        cache.put("C", "Cherry", 10000); // B is evicted
+        // Cache hit
+        cache.getAsync("A")
+             .thenAccept(System.out::println)
+             .join();
 
-        System.out.println(cache.get("B")); // null
-        System.out.println(cache.get("C")); // Cherry
+        // Update value
+        cache.setAsync("A", "Apricot")
+             .thenAccept(System.out::println)
+             .join();
 
-        cache.put("D", "Dates", 1000);
-        Thread.sleep(1500);
+        // Read updated value
+        cache.getAsync("A")
+             .thenAccept(System.out::println)
+             .join();
 
-        System.out.println(cache.get("D")); // null
+        System.out.println(
+            "Database calls: "
+            + cache.databaseRequestCount()
+        );
+
+        cache.close();
     }
 }
