@@ -1,24 +1,62 @@
 
-public interface Cache<K, V> {
+import java.util.*;
 
-    // Create a new key-value pair
-    boolean create(K key, V value);
+public class Cache {
+    private static class Entry {
+        String value;
+        long expiry;
 
-    // Read a value using its key
-    V read(K key);
+        Entry(String value, long ttl) {
+            this.value = value;
+            this.expiry = System.currentTimeMillis() + ttl;
+        }
+    }
 
-    // Update an existing key
-    boolean update(K key, V value);
+    private final int capacity;
+    private final Map<String, Entry> data =
+        new LinkedHashMap<>(16, 0.75f, true);
 
-    // Delete a key
-    boolean delete(K key);
+    public Cache(int capacity) {
+        this.capacity = capacity;
+    }
 
-    // Check whether a key exists
-    boolean containsKey(K key);
+    public void put(String key, String value, long ttl) {
+        removeExpired();
 
-    // Get the number of entries
-    int size();
+        if (!data.containsKey(key) && data.size() == capacity) {
+            evictLRU();
+        }
 
-    // Display all entries
-    void printAll();
+        data.put(key, new Entry(value, ttl));
+    }
+
+    public String get(String key) {
+        Entry entry = data.get(key);
+
+        if (entry == null) return null;
+
+        if (System.currentTimeMillis() >= entry.expiry) {
+            data.remove(key);
+            return null;
+        }
+
+        return entry.value;
+    }
+
+    public void delete(String key) {
+        data.remove(key);
+    }
+
+    private void removeExpired() {
+        long now = System.currentTimeMillis();
+
+        data.entrySet().removeIf(
+            item -> now >= item.getValue().expiry
+        );
+    }
+
+    private void evictLRU() {
+        String firstKey = data.keySet().iterator().next();
+        data.remove(firstKey);
+    }
 }

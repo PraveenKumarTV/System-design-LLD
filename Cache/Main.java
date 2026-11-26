@@ -1,50 +1,21 @@
 
 public class Main {
+    public static void main(String[] args) throws Exception {
+        Cache cache = new Cache(2);
 
-    public static void main(String[] args) {
+        cache.put("A", "Apple", 10000);
+        cache.put("B", "Banana", 10000);
 
-        // Create a cache
-        Cache<String, String> cache = new InMemoryCache<>();
+        System.out.println(cache.get("A")); // Apple
 
-        // CREATE
-        System.out.println("Create name: "
-                + cache.create("name", "Praveen"));
+        cache.put("C", "Cherry", 10000); // B is evicted
 
-        System.out.println("Create city: "
-                + cache.create("city", "Chennai"));
+        System.out.println(cache.get("B")); // null
+        System.out.println(cache.get("C")); // Cherry
 
-        // READ
-        System.out.println("Name: "
-                + cache.read("name"));
+        cache.put("D", "Dates", 1000);
+        Thread.sleep(1500);
 
-        // UPDATE
-        System.out.println("Update name: "
-                + cache.update("name", "Kumar"));
-
-        System.out.println("Updated name: "
-                + cache.read("name"));
-
-        // Try updating a missing key
-        System.out.println("Update country: "
-                + cache.update("country", "India"));
-
-        // CHECK
-        System.out.println("Contains city: "
-                + cache.containsKey("city"));
-
-        // DELETE
-        System.out.println("Delete city: "
-                + cache.delete("city"));
-
-        System.out.println("Contains city: "
-                + cache.containsKey("city"));
-
-        // CACHE SIZE
-        System.out.println("Cache size: "
-                + cache.size());
-
-        // DISPLAY ALL
-        System.out.println("Cache contents:");
-        cache.printAll();
+        System.out.println(cache.get("D")); // null
     }
 }
