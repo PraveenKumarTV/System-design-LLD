@@ -15,9 +15,13 @@ public class Board {
         }
     }
 
-    public boolean placeMark(int row, int col, char mark) {
+    public boolean placeMove(Move move) {
 
-        // Check whether the position is inside the board
+        int row = move.getRow();
+        int col = move.getCol();
+        char mark = move.getMark();
+
+        // Check whether the position is valid
         if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
             return false;
         }
@@ -27,7 +31,7 @@ public class Board {
             return false;
         }
 
-        // Check whether the cell is already occupied
+        // Check whether the cell is occupied
         if (grid[row][col] != ' ') {
             return false;
         }
@@ -38,24 +42,11 @@ public class Board {
         return true;
     }
 
-    public void display() {
+    public char getCell(int row, int col) {
+        return grid[row][col];
+    }
 
-        for (int row = 0; row < SIZE; row++) {
-
-            for (int col = 0; col < SIZE; col++) {
-
-                System.out.print(" " + grid[row][col] + " ");
-
-                if (col < SIZE - 1) {
-                    System.out.print("|");
-                }
-            }
-
-            System.out.println();
-
-            if (row < SIZE - 1) {
-                System.out.println("---+---+---");
-            }
-        }
+    public int getSize() {
+        return SIZE;
     }
 }

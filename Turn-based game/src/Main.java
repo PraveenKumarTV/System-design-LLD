@@ -5,30 +5,29 @@ public class Main {
 
         GameRules rules = new TicTacToeRules();
 
+        MoveStrategy strategy =
+                new RandomMoveStrategy();
+
         Game game = new Game(
-                "Player 1",
-                "Player 2",
-                rules
+                "Computer 1",
+                "Computer 2",
+                rules,
+                strategy
         );
 
-        // Player 1: X at (0, 0)
-        game.makeMove(0, 0);
+        while (game.getResult().getStatus()
+                == GameResult.Status.IN_PROGRESS) {
 
-        // Player 2: O at (1, 0)
-        game.makeMove(1, 0);
+            System.out.println(
+                    game.getCurrentPlayer().getName()
+                    + " is making a move..."
+            );
 
-        // Player 1: X at (0, 1)
-        game.makeMove(0, 1);
+            game.makeComputerMove();
 
-        // Player 2: O at (1, 1)
-        game.makeMove(1, 1);
-
-        // Player 1: X at (0, 2) -> wins
-        game.makeMove(0, 2);
-
-        game.displayBoard();
-
-        System.out.println();
+            game.displayBoard();
+            System.out.println();
+        }
 
         game.displayResult();
     }
