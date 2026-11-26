@@ -1,21 +1,35 @@
 
+import java.util.concurrent.CompletableFuture;
+
 public class Main {
+
     public static void main(String[] args) throws Exception {
-        Cache cache = new Cache(2);
 
-        cache.put("A", "Apple", 10000);
-        cache.put("B", "Banana", 10000);
+        Cache cache = new Cache(3, 10000);
 
-        System.out.println(cache.get("A")); // Apple
+        // Three requests for the same key
+        CompletableFuture<String> request1 =
+            cache.getAsync("A");
 
-        cache.put("C", "Cherry", 10000); // B is evicted
+        CompletableFuture<String> request2 =
+            cache.getAsync("A");
 
-        System.out.println(cache.get("B")); // null
-        System.out.println(cache.get("C")); // Cherry
+        CompletableFuture<String> request3 =
+            cache.getAsync("A");
 
-        cache.put("D", "Dates", 1000);
-        Thread.sleep(1500);
+        System.out.println(request1.get());
+        System.out.println(request2.get());
+        System.out.println(request3.get());
 
-        System.out.println(cache.get("D")); // null
+        System.out.println("Database calls: "
+            + cache.databaseRequestCount());
+
+        // Update the value
+        cache.setAsync("A", "Updated Apple").get();
+
+        // Read our own write
+        System.out.println(cache.getAsync("A").get());
+
+        cache.close();
     }
 }
