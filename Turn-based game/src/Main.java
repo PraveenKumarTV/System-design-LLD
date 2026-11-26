@@ -3,31 +3,51 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Board board = new Board();
-        BoardDisplay boardDisplay = new BoardDisplay();
+        Game game = new Game("Player 1", "Player 2");
 
-        Player player1 = new Player("Player 1", 'X');
-        Player player2 = new Player("Player 2", 'O');
+        System.out.println("Game started!");
+        System.out.println();
 
-        Move firstMove = player1.createMove(0, 0);
-        Move secondMove = player2.createMove(1, 1);
+        // Player 1 makes a move
+        System.out.println(
+                game.getCurrentPlayer().getName() + "'s turn"
+        );
 
-        board.placeMove(firstMove);
-        board.placeMove(secondMove);
+        game.makeMove(0, 0);
 
-        boardDisplay.display(board);
+        game.displayBoard();
+        System.out.println();
+
+        // Player 2 makes a move
+        System.out.println(
+                game.getCurrentPlayer().getName() + "'s turn"
+        );
+
+        game.makeMove(1, 1);
+
+        game.displayBoard();
+        System.out.println();
+
+        // Player 1 tries an occupied cell
+        System.out.println(
+                game.getCurrentPlayer().getName() + "'s turn"
+        );
+
+        boolean result = game.makeMove(0, 0);
+
+        System.out.println("Move successful: " + result);
+
+        // The turn should remain with Player 1
+        System.out.println(
+                "Current player: "
+                        + game.getCurrentPlayer().getName()
+        );
 
         System.out.println();
 
-        // Represent different possible game results
+        // Player 1 makes a valid move
+        game.makeMove(0, 1);
 
-        GameResult currentResult = GameResult.inProgress();
-        currentResult.displayResult();
-
-        GameResult winningResult = GameResult.win(player1);
-        winningResult.displayResult();
-
-        GameResult drawResult = GameResult.draw();
-        drawResult.displayResult();
+        game.displayBoard();
     }
 }
