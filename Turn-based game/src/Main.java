@@ -3,7 +3,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Game game = new Game("Player 1", "Player 2");
+        GameRules rules = new TicTacToeRules();
+
+        Game game = new Game(
+                "Player 1",
+                "Player 2",
+                rules
+        );
 
         // Player 1: X at (0, 0)
         game.makeMove(0, 0);
@@ -25,12 +31,5 @@ public class Main {
         System.out.println();
 
         game.displayResult();
-
-        // Try making a move after the game ends
-        boolean moveAfterGame = game.makeMove(2, 2);
-
-        System.out.println(
-                "Move after game ended: " + moveAfterGame
-        );
     }
 }

@@ -3,7 +3,7 @@ public class Game {
 
     private Board board;
     private BoardDisplay boardDisplay;
-    private TicTacToeRules rules;
+    private GameRules rules;
 
     private Player player1;
     private Player player2;
@@ -12,11 +12,16 @@ public class Game {
 
     private GameResult result;
 
-    public Game(String player1Name, String player2Name) {
+    public Game(
+            String player1Name,
+            String player2Name,
+            GameRules rules
+    ) {
 
         board = new Board();
         boardDisplay = new BoardDisplay();
-        rules = new TicTacToeRules();
+
+        this.rules = rules;
 
         player1 = new Player(player1Name, 'X');
         player2 = new Player(player2Name, 'O');
@@ -28,18 +33,14 @@ public class Game {
 
     public boolean makeMove(int row, int col) {
 
-        // Stop if the game has already ended
         if (result.getStatus() != GameResult.Status.IN_PROGRESS) {
             return false;
         }
 
-        // Create a move for the current player
         Move move = currentPlayer.createMove(row, col);
 
-        // Try to place the move
         boolean successful = board.placeMove(move);
 
-        // Invalid move: do not change the turn
         if (!successful) {
             return false;
         }
@@ -58,7 +59,6 @@ public class Game {
             return true;
         }
 
-        // Continue the game with the next player
         switchPlayer();
 
         return true;

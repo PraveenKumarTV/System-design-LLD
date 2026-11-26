@@ -1,6 +1,7 @@
 
-public class TicTacToeRules {
+public class TicTacToeRules implements GameRules {
 
+    @Override
     public boolean hasWon(Board board, char mark) {
 
         int size = board.getSize();
@@ -39,7 +40,7 @@ public class TicTacToeRules {
             }
         }
 
-        // Check diagonal from top-left to bottom-right
+        // Check main diagonal
         boolean mainDiagonalMatch = true;
 
         for (int i = 0; i < size; i++) {
@@ -53,7 +54,7 @@ public class TicTacToeRules {
             return true;
         }
 
-        // Check diagonal from top-right to bottom-left
+        // Check opposite diagonal
         boolean otherDiagonalMatch = true;
 
         for (int i = 0; i < size; i++) {
@@ -66,6 +67,7 @@ public class TicTacToeRules {
         return otherDiagonalMatch;
     }
 
+    @Override
     public boolean isBoardFull(Board board) {
 
         int size = board.getSize();
