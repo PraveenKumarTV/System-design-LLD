@@ -4,28 +4,30 @@ public class Main {
     public static void main(String[] args) {
 
         Board board = new Board();
+        BoardDisplay boardDisplay = new BoardDisplay();
 
-        // First move: X places a mark at row 0, column 0
-        boolean firstMove = board.placeMark(0, 0, 'X');
+        Player player1 = new Player("Player 1", 'X');
+        Player player2 = new Player("Player 2", 'O');
 
-        // Second move: O places a mark at row 1, column 1
-        boolean secondMove = board.placeMark(1, 1, 'O');
+        Move firstMove = player1.createMove(0, 0);
+        Move secondMove = player2.createMove(1, 1);
 
-        // Third move: O tries to use an occupied cell
-        boolean thirdMove = board.placeMark(0, 0, 'O');
+        board.placeMove(firstMove);
+        board.placeMove(secondMove);
 
-        // Fourth move: X tries an invalid position
-        boolean fourthMove = board.placeMark(5, 5, 'X');
-
-        // Display move results
-        System.out.println("First move successful: " + firstMove);
-        System.out.println("Second move successful: " + secondMove);
-        System.out.println("Third move successful: " + thirdMove);
-        System.out.println("Fourth move successful: " + fourthMove);
+        boardDisplay.display(board);
 
         System.out.println();
 
-        // Display the board
-        board.display();
+        // Represent different possible game results
+
+        GameResult currentResult = GameResult.inProgress();
+        currentResult.displayResult();
+
+        GameResult winningResult = GameResult.win(player1);
+        winningResult.displayResult();
+
+        GameResult drawResult = GameResult.draw();
+        drawResult.displayResult();
     }
 }
